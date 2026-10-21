@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "flowwer-client",
+	"version": "${version}",
+	"name": "Flowwer Client",
+	"description": "The best Minecraft Client of 2026 !",
+	"authors": [
+		"DaXx"
+	],
+	"contact": {
+		"homepage": "https://daxx.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/flowwer-client/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.daxx.flowwerclient.FlowwerClient"
+		],
+		"fabric-datagen": [
+			"net.daxx.flowwerclient.FlowwerClientDataGenerator"
+		],
+		"client": [
+			"net.daxx.flowwerclient.FlowwerClientClient"
+		]
+	},
+	"mixins": [
+		"flowwer-client.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~1.21",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
