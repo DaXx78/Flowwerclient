@@ -35,6 +35,8 @@ public class HudManager {
         WIDGETS.add(new EffectsWidget());
         WIDGETS.add(new ArmorWidget());
         WIDGETS.add(new MusicWidget());
+        WIDGETS.add(new KeystrokesWidget());
+        WIDGETS.add(new TotemWidget());
     }
 
     public static void render(DrawContext context) {
@@ -74,10 +76,12 @@ public class HudManager {
         }
     }
 
-    private static int getPing(MinecraftClient client) {
-        if (client.player == null || client.getNetworkHandler() == null) return 0;
+    private static String pingText(MinecraftClient client) {
+        if (client.isInSingleplayer()) return "Local";
+        if (client.player == null || client.getNetworkHandler() == null) return "-- ms";
         PlayerListEntry entry = client.getNetworkHandler().getPlayerListEntry(client.player.getUuid());
-        return entry == null ? 0 : entry.getLatency();
+        int latency = entry == null ? 0 : entry.getLatency();
+        return latency <= 0 ? "-- ms" : latency + " ms";
     }
 
     static class InfoBarWidget extends HudWidget {
@@ -98,7 +102,7 @@ public class HudManager {
         public void measure(MinecraftClient c, boolean preview) {
             time = LocalTime.now().format(TIME_FORMAT);
             fps = c.getCurrentFps() + " FPS";
-            ping = getPing(c) + " ms";
+            ping = pingText(c);
 
             int width = 5 + LOGO_SIZE + 5 + c.textRenderer.getWidth(time) + 5;
             if (Modules.FPS.enabled) width += 11 + c.textRenderer.getWidth(fps);

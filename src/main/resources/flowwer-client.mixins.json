@@ -8,7 +8,9 @@
 	"client": [
 		"CameraMixin",
 		"EntityMixin",
-		"GameRendererMixin"
+		"GameRendererMixin",
+		"ParticleManagerMixin",
+		"WorldRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

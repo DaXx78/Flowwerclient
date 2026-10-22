@@ -28,6 +28,13 @@ public class Config {
             if (value != null) module.enabled = Boolean.parseBoolean(value);
         }
 
+        for (ClientModule module : Modules.ALL) {
+            for (Setting setting : module.settings) {
+                String value = props.getProperty("setting." + module.name.replace(' ', '_') + "." + setting.name.replace(' ', '_'));
+                if (value != null) setting.deserialize(value);
+            }
+        }
+
         for (HudWidget widget : HudManager.WIDGETS) {
             String x = props.getProperty("hud." + widget.id + ".x");
             String y = props.getProperty("hud." + widget.id + ".y");
@@ -45,6 +52,13 @@ public class Config {
 
         for (ClientModule module : Modules.ALL) {
             props.setProperty("module." + module.name.replace(' ', '_'), String.valueOf(module.enabled));
+
+        }
+
+        for (ClientModule module : Modules.ALL) {
+            for (Setting setting : module.settings) {
+                props.setProperty("setting." + module.name.replace(' ', '_') + "." + setting.name.replace(' ', '_'), setting.serialize());
+            }
         }
         for (HudWidget widget : HudManager.WIDGETS) {
             props.setProperty("hud." + widget.id + ".x", String.valueOf(widget.fx));

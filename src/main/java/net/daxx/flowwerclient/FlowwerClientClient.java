@@ -5,6 +5,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.option.KeyBinding;
@@ -27,6 +28,11 @@ public class FlowwerClientClient implements ClientModInitializer {
                 GLFW.GLFW_KEY_RIGHT_SHIFT,
                 CATEGORY
         ));
+
+        ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
+            if (!overlay) ChatAnimation.trigger();
+        });
+        ClientReceiveMessageEvents.CHAT.register((message, signedMessage, sender, params, timestamp) -> ChatAnimation.trigger());
 
         Modules.SNAP_LOOK.key = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.flowwerclient.snap_look",
@@ -75,6 +81,22 @@ public class FlowwerClientClient implements ClientModInitializer {
         HudElementRegistry.replaceElement(VanillaHudElements.STATUS_EFFECTS, original -> (context, tickCounter) -> {
             if (!Modules.EFFECTS.enabled) original.render(context, tickCounter);
         });
+
+        HudElementRegistry.replaceElement(VanillaHudElements.CHAT, original -> (context, tickCounter) -> {
+            if (!Modules.CHAT.enabled) return;
+
+            float offset = ChatAnimation.offset();
+            if (offset > 0.01f) {
+                context.getMatrices().pushMatrix();
+                context.getMatrices().translate(0f, offset);
+                original.render(context, tickCounter);
+                context.getMatrices().popMatrix();
+            } else {
+                original.render(context, tickCounter);
+            }
+        });
+
+
 
         DiscordRPC.start();
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
