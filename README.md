@@ -16,6 +16,17 @@ Add
     * FPS
     * Ping
     * Music Player
-- Compatible 1.21
+    * key strokes
+    * block border
+    * Weather Changer
+    * FOV Changer
+    * particule ON OFF
+    * chat hide show
+    * Compass
+    * Theme changer
+    * Animated Chat
+    * Search in the menu
+    * Custom UI
+- Compatible 1.21 / 11
 - HUD Customizer
 - Animations
